@@ -4,7 +4,7 @@ import time
 import sys
 from Node import node
 goalState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
-
+ 
 def main():
     print("Welcome to Raeed's 8 puzzle solver")
 
