@@ -4,7 +4,7 @@ goalState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
  
 def main():
     print("Welcome to Raeed's 8 puzzle solver")
-
+ 
     #user Gdecesion for defult puzzle or custom
 
     trivial = [[1, 2, 3],[4, 5, 6],[7, 8, 0]]
