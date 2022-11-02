@@ -1,6 +1,13 @@
 import heapq as min_heap_esque_qu
+from msilib.schema import Class
+from Node import node
+import time
+import sys
+import copy
 
-goalState = [[1, 2, 3], [4, 5, 6], [7, 8, 0]]
+goalState = [[1, 2, 3], 
+             [4, 5, 6], 
+             [7, 8, 0]]
  
 def main():
     print("Welcome to Raeed's 8 puzzle solver")
@@ -17,7 +24,7 @@ def main():
     Fpuzzle=[]
 
     if Gdecesion == 'd':
-        defaultChoice = input("choose a number 1 - 5 with 1 being trivial and 5 being extremely difficult")
+        defaultChoice = input("choosoe a number 1 - 5 with 1 being trivial and 5 being extremely difficult")
         if(defaultChoice == '1'):
             Fpuzzle = trivial
         elif(defaultChoice == '2'):
@@ -29,7 +36,7 @@ def main():
         elif(defaultChoice == '5'):
             Fpuzzle = oh_boy
             
-    elif Gdecesion == 'c':
+    elif Gdecesion == 'col':
         puzzleValues = input("type each number in your puzzle seperated by a space, 0 is empty space")
         FpuzzleValues = [int(item) for item in puzzleValues.split(' ')]
         r1 = (FpuzzleValues[0],FpuzzleValues[1],FpuzzleValues[2])
@@ -59,7 +66,7 @@ def generalSearch(puzzle, heuristic):
     min_heap_esque_queue.heappush(working_queue, starting_node)
     num_nodes_expanded = 0
     max_queue_size = 0
-    repeated_states[starting_node.board_to_tuple()] = "This is the parent board"
+    repeated_states[starting_node.board_to_tSuple()] = "This is the parent board"
 
     stack_to_print = [] # the board states are stored in a stack
 
@@ -67,7 +74,7 @@ def generalSearch(puzzle, heuristic):
         max_queue_size = max(len(working_queue), max_queue_size)
         # the node from the queue being considered/checked
         node_from_queue = min_heap_esque_queue.heappop(working_queue)
-        repeated_states[node_from_queue.board_to_tuple()] = "This can be anything"
+        repeated_states[node_from_queue.board_to_tSuple()] = "This can be anything"
         if node_from_queue.solved(): # check if the current state of the board is the solution
             while len(stack_to_print) > 0: # the stack of nodes for the traceback
                 print_puzzle(stack_to_print.pop())
@@ -78,6 +85,84 @@ def generalSearch(puzzle, heuristic):
         stack_to_print.append(node_from_queue.board)
 
 
+# Go through the goal puzzle and sum the # of moves needed to return pieces 1-9 to their original spot
+def manhattanDistance(puzzle):
+    dist = 0
+    gr, gc, row, col = 0, 0, 0, 0
+
+    for l in range(8):
+        for i in range(len(puzzle)):
+            for j in range(len(puzzle)):
+                if int(puzzle[i][j]) == l:
+                    row = i
+                    col = j
+                if goalState[i][j] == l:
+                    gr = i
+                    gc = j
+        dist += abs(gr-row) + abs(gc-col)
+
+    return dist
+
+# dist how many tiles are not in the same place (not including the 0 tile)
+def misplacedTile(puzzle):
+    dist = 0
+    for i in range(len(puzzle)):
+        for j in range(len(puzzle)):
+            if int(puzzle[i][j]) != goalState[i][j] and int(puzzle[i][j]) != 0:
+                dist += 1
+    return dist
+
+#function used to expand nodes and demonstrate all possible movements for the tile
+
+def repeatstate(loc,noted):
+    return(loc not in noted)
+
+def expand(nodeToExp,seen):
+    row,col = 0,0
+    for i in range(len(nodeToExp.puzzle)):
+        for j in range(len(nodeToExp.puzzle)):
+            if int(nodeToExp.puzzle[i][j]) == 0:
+                row,col = i,j
+
+    if  row > 0: 
+        # Resource used for deepcopy: https://docs.python.org/3/library/copy.html
+        Sup = copy.deepcopy(nodeToExp.puzzle)
+        ph = Sup[row][col]
+        Sup[row][col] = Sup[row-1][col]
+        Sup[row-1][col] = ph
+
+        if repeatstate(Sup,seen):
+            nodeToExp.c3 = node(Sup)
+
+    if  row < len(nodeToExp.puzzle) - 1:
+        Sdown = copy.deepcopy(nodeToExp.puzzle)
+        ph = Sdown[row][col]
+        Sdown[row][col] = Sdown[row + 1][col]
+        Sdown[row + 1][col] = ph
+
+        if repeatstate(Sdown,seen):
+            nodeToExp.c4 = node(Sdown) 
+
+    if  col > 0:
+        Sleft = copy.deepcopy(nd.puzzle)
+        ph = Sleft[row][col]
+        Sleft[row][col] = Sleft[row][col - 1]
+        Sleft[row][col - 1] = ph
+        if repeatstate(Sleft,seen):
+            nodeToExp.c1 = node(Sleft)
+
+    if  col < len(nd.puzzle)-1:
+        Sright = copy.deepcopy(nd.puzzle)
+        ph = Sright[row][col]
+        Sright[row][col] = Sright[row][col+1]
+        Sright[row][col+1] = ph
+
+        if repeatstate(Sright,seen):
+            nodeToExp.c2 = node(Sright)
+
+    return nodeToExp
 
 if __name__ == "__main__":
     main()
+
+    
