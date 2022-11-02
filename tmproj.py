@@ -2,6 +2,7 @@ import copy
 from Node import node
 import time
 import sys
+
 def main():
     print('Welcome to Danial\'s 8 puzzle solver!')
 
