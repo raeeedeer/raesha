@@ -57,34 +57,10 @@ def main():
        # generalSearch(Fpuzzle,misplacedTile(Fpuzzle))
     elif algoDec == '3':
         print("Manhattan distance heuristic ")
-        #generalSearch(Fpuzzle,manhattanDistance(Fpuzzle))
-    
+
+#generalSearch(Fpuzzle,manhattanDistance(Fpuzzle))
 def generalSearch(puzzle, heuristic):
-    starting_node = TreeNode.TreeNode(None, puzzle, 0, 0)
-    working_queue = []
-    repeated_states = dict()
-    min_heap_esque_queue.heappush(working_queue, starting_node)
-    num_nodes_expanded = 0
-    max_queue_size = 0
-    repeated_states[starting_node.board_to_tSuple()] = "This is the parent board"
-
-    stack_to_print = [] # the board states are stored in a stack
-
-    while len(working_queue) > 0:
-        max_queue_size = max(len(working_queue), max_queue_size)
-        # the node from the queue being considered/checked
-        node_from_queue = min_heap_esque_queue.heappop(working_queue)
-        repeated_states[node_from_queue.board_to_tSuple()] = "This can be anything"
-        if node_from_queue.solved(): # check if the current state of the board is the solution
-            while len(stack_to_print) > 0: # the stack of nodes for the traceback
-                print_puzzle(stack_to_print.pop())
-            print("Number of nodes expanded:", num_nodes_expanded)
-            print("Max queue size:", max_queue_size)
-            return node_from_queue
-
-        stack_to_print.append(node_from_queue.board)
-
-
+   print("todo")
 # Go through the goal puzzle and sum the # of moves needed to return pieces 1-9 to their original spot
 def manhattanDistance(puzzle):
     dist = 0
@@ -144,15 +120,15 @@ def expand(nodeToExp,seen):
             nodeToExp.c4 = node(Sdown) 
 
     if  col > 0:
-        Sleft = copy.deepcopy(nd.puzzle)
+        Sleft = copy.deepcopy(nodeToExp.puzzle)
         ph = Sleft[row][col]
         Sleft[row][col] = Sleft[row][col - 1]
         Sleft[row][col - 1] = ph
         if repeatstate(Sleft,seen):
             nodeToExp.c1 = node(Sleft)
 
-    if  col < len(nd.puzzle)-1:
-        Sright = copy.deepcopy(nd.puzzle)
+    if  col < len(nodeToExp.puzzle)-1:
+        Sright = copy.deepcopy(nodeToExp.puzzle)
         ph = Sright[row][col]
         Sright[row][col] = Sright[row][col+1]
         Sright[row][col+1] = ph
