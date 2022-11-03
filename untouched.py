@@ -130,7 +130,7 @@ def generalsearch(problem, queuefunc):
     # Loop until we finish solving a problem
     while True:
         # Sort the queue for the lowest h(n) + g(n)
-        if queuefunc != 1:
+        if queuefunc != 1 and h >= 0:
             # Utilizing a lambda function instead to make sorting faster - sorts by lowest h(n) + g(n)
             # and by depth if there's a tie
             # Resource for sorting: https://docs.python.org/3/howto/sorting.html
@@ -142,7 +142,7 @@ def generalsearch(problem, queuefunc):
 
         # Remove the first node, increase node visited count but decrease queue size
         nd = q.pop(0)
-        if nd.expanded is False:
+        if nd.expanded == False:
             ncount += 1
             nd.expanded = True
         qsz -= 1
@@ -245,10 +245,7 @@ class node:
         self.puzzle = puzzle
         self.hcost = 0
         self.depth = 0
-        self.c1 = None
-        self.c2 = None
-        self.c3 = None
-        self.c4 = None
+        self.c1 = self.c2 = self.c3 = self.c4 = None
         self.expanded = False
 
 
