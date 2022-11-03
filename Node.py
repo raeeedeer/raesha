@@ -1,7 +1,9 @@
 class node:
     def __init__(self, puzzle):
         self.puzzle = puzzle
-        self.hcost = 0
+        self.hc = 0
         self.depth = 0
-        self.c1 = self.c2 = self.c3 = self.c4 = None
+        self.child1 = self.child2 = self.child3 = self.child4 = None
         self.expanded = False
+   
+   #node class with all relevent parameters for each puzzle state
